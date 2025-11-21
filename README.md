@@ -1,21 +1,21 @@
-# linkedin-jobsearch-ai-agent  
-A LinkedIn job-search automation tool that scrapes postings, filters results, removes duplicates, and generates a clean daily or weekly job digest.  
-Fully configurable and cross-platform, suitable for beginners and developers alike.
+# jobsearch-automation-agent  
+A modular job-search automation tool that scrapes job postings, filters results, removes duplicates, and generates a clean daily or weekly digest.  
+Fully configurable, cross-platform, and beginner-friendly.
 
 ---
 
 ## Features
 
-- LinkedIn job scraping with automatic pagination  
-- Keyword-based title and location filtering  
-- Posting-age extraction (“Posted X days ago”)  
-- Job deduplication using persistent job history  
-- Markdown digest generation  
-- Optional email notifications (Gmail App Password supported)  
-- Configuration-driven design — no code changes needed  
-- Extendable scraper architecture  
-- Works on macOS, Linux, and Windows  
-- Optional automation via launchd, cron, or Task Scheduler  
+- Automatic job scraping (LinkedIn included by default)
+- Keyword-based title and location filtering
+- Posting-age extraction (“Posted X days ago”)
+- Job deduplication using historical tracking
+- Markdown digest generation
+- Optional email notifications (Gmail App Password supported)
+- Configuration-driven design — no code changes needed
+- Extendable scraper architecture (add Greenhouse, Lever, Indeed, etc.)
+- Works on macOS, Linux, and Windows
+- Optional automation via launchd, cron, or Task Scheduler
 
 ---
 
@@ -23,8 +23,8 @@ Fully configurable and cross-platform, suitable for beginners and developers ali
 
 ### 1. Clone the repository
 ```
-git clone https://github.com/tmtleung/linkedin-jobsearch-ai-agent.git
-cd linkedin-jobsearch-ai-agent
+git clone https://github.com/<your-username>/jobsearch-automation-agent.git
+cd jobsearch-automation-agent
 ```
 
 ### 2. Run the setup script
@@ -48,13 +48,13 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 This will:
 - create a virtual environment  
 - install dependencies  
-- create `config/config.json` from the example template  
+- generate `config/config.json` from the template  
 
 ---
 
-## Configuring the Agent
+## Configuration
 
-Your main configuration file lives here:
+All settings live in:
 
 ```
 config/config.json
@@ -62,11 +62,11 @@ config/config.json
 
 It defines:
 
-- job title keywords  
+- title keywords  
 - location keywords  
 - maximum posting age  
-- email notification settings  
-- LinkedIn scraper options  
+- email settings  
+- scraper options  
 
 Example:
 
@@ -80,11 +80,9 @@ Example:
             "max_pages": 10
         }
     },
-
     "filters": {
         "max_post_age_days": 30
     },
-
     "email_notifications": {
         "enabled": false,
         "sender": "youremail@example.com",
@@ -101,96 +99,88 @@ Example:
 
 ## Customizing Your Location Search
 
-The agent filters jobs by matching keywords inside the job’s location field.  
-This allows users to target specific cities, states, regions, or countries.
+Modify:
 
-### Modify in:
 ```
-config/config.json
+"location_keywords": [...]
 ```
 
 ### Examples
 
-**Search only in San Francisco:**
+**Search a city:**
 ```json
-"location_keywords": ["San Francisco"]
+["San Francisco"]
 ```
 
 **Search multiple cities:**
 ```json
-"location_keywords": ["Austin", "Seattle", "Denver"]
+["Austin", "Seattle", "Denver"]
 ```
 
-**Search a whole country:**
+**Search remote-only:**
 ```json
-"location_keywords": ["United States"]
+["Remote"]
 ```
 
-**Search remote-only roles:**
+**Remove location filtering:**
 ```json
-"location_keywords": ["Remote"]
-```
-
-**Remove location filtering entirely:**
-```json
-"location_keywords": []
+[]
 ```
 
 ### Why no radius setting?
 
-LinkedIn’s public job listings do not provide a reliable radius parameter.  
-City/region keyword matching works globally and avoids site-specific behavior.
+Public job listings do not expose a reliable radius parameter.  
+Keyword-based location filtering works globally across all platforms.
 
 ---
 
 ## Running the Agent
-
-After configuring:
 
 ```
 python run_agent.py
 ```
 
 The agent will:
-1. Scrape LinkedIn  
-2. Filter by title, location, and posting age  
-3. Deduplicate using `history/job_history.json`  
-4. Generate a Markdown digest in `outputs/latest_digest.md`  
-5. Optionally email the digest  
+
+1. Run enabled scrapers  
+2. Filter by title, location, posting age  
+3. Remove duplicates using `history/job_history.json`  
+4. Generate a digest in `outputs/latest_digest.md`  
+5. Optionally send it via email  
 
 ---
 
-## Optional: Email Digest Setup (Gmail)
+## Email Digest (Optional)
 
-1. Enable 2-Factor Authentication in Google  
-2. Create an App Password  
-3. Set the password as an environment variable:
+Requires a Gmail App Password.
 
-**macOS / Linux**
+### macOS / Linux:
 ```
 export EMAIL_PASSWORD="your-app-password"
 ```
 
-**Windows (PowerShell)**
+### Windows:
 ```
 setx EMAIL_PASSWORD "your-app-password"
 ```
 
-Enable email:
+Enable in config:
+
 ```json
 "email_notifications": { "enabled": true }
 ```
 
 ---
 
-## Automation (macOS, Linux, Windows)
+## Automation
 
-See:
+Automation guides are in:
+
 ```
 docs/automation.md
 ```
 
-Includes step-by-step instructions for:
+Includes:
 
 - macOS launchd  
 - Linux cron  
@@ -200,14 +190,13 @@ Includes step-by-step instructions for:
 
 ## Extending the Agent
 
-Scrapers follow a simple interface:
+Add scrapers in:
 
 ```
 scrapers/
-    example_scraper_template.py
 ```
 
-Each scraper must return jobs in this format:
+New scrapers must return jobs in this format:
 
 ```python
 {
@@ -219,14 +208,12 @@ Each scraper must return jobs in this format:
 }
 ```
 
-Adding additional sources (e.g., Indeed, Greenhouse, Lever) is straightforward.
-
 ---
 
 ## Project Structure
 
 ```
-linkedin-jobsearch-ai-agent/
+jobsearch-automation-agent/
 │
 ├── config/
 │   ├── config.example.json
@@ -274,6 +261,19 @@ linkedin-jobsearch-ai-agent/
 
 ---
 
+## Future Enhancements
+
+- AI-powered job relevance scoring  
+- Resume screening  
+- Automated resume tailoring suggestions  
+- AI-generated job summaries  
+- Additional scraper modules (Greenhouse, Lever, Indeed)  
+- Enhanced date and location parsing  
+
+These would be optional modules requiring user-provided API keys.
+
+---
+
 ## License
 MIT License.
 
@@ -282,28 +282,3 @@ MIT License.
 ## Contributing
 Pull requests are welcome.
 
-## Future Enhancements
-
-This project is designed to be modular and extendable.  
-Possible future additions include:
-
-- **AI-powered job relevance scoring**  
-  Semantic ranking of job postings using an LLM (optional module).
-
-- **Resume screening**  
-  Matching a user’s resume against job descriptions to score fit.
-
-- **Automated resume tailoring**  
-  Generating role-specific resume suggestions based on job postings.
-
-- **Multi-source scrapers**  
-  Optional scrapers for additional job boards (Greenhouse, Lever, Indeed, etc).
-
-- **AI-generated job summaries**  
-  Summarizing long job descriptions into short, digestible bullet points.
-
-- **Improved date and location intelligence**  
-  More robust parsing, city normalization, and inferred regions.
-
-These would be offered as opt-in extensions requiring an API key,  
-keeping the core project entirely free, local, and configuration-based.
