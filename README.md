@@ -282,3 +282,28 @@ MIT License.
 ## Contributing
 Pull requests are welcome.
 
+## Future Enhancements
+
+This project is designed to be modular and extendable.  
+Possible future additions include:
+
+- **AI-powered job relevance scoring**  
+  Semantic ranking of job postings using an LLM (optional module).
+
+- **Resume screening**  
+  Matching a user’s resume against job descriptions to score fit.
+
+- **Automated resume tailoring**  
+  Generating role-specific resume suggestions based on job postings.
+
+- **Multi-source scrapers**  
+  Optional scrapers for additional job boards (Greenhouse, Lever, Indeed, etc).
+
+- **AI-generated job summaries**  
+  Summarizing long job descriptions into short, digestible bullet points.
+
+- **Improved date and location intelligence**  
+  More robust parsing, city normalization, and inferred regions.
+
+These would be offered as opt-in extensions requiring an API key,  
+keeping the core project entirely free, local, and configuration-based.
